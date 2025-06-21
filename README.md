@@ -9,18 +9,24 @@ Generative AI Medical Chatbot is an AI-powered virtual assistant designed to pro
 - **Healthcare Navigation:** Can be extended to help users find healthcare facilities and specialists.
 - **Privacy-Focused:** User health data is not stored.
 - **Concise, Contextual Answers:** Answers are based on retrieved context and limited to three sentences.
+- **Multiple UI Options:** Flask-based web interface and Chainlit interactive chat.
+- **Conversation History:** The Chainlit version maintains conversation context for follow-up questions.
 
 ## Tech Stack
-- Python, Flask
+- Python, Flask, Chainlit
 - LangChain, Pinecone, HuggingFace Embeddings
 - PDF data ingestion
-- HTML/CSS frontend
+- HTML/CSS frontend for Flask
+- Interactive UI with Chainlit
 
 ## Installation
 
 ### Prerequisites
 - Python 3.8+
 - Pinecone API key (for vector search)
+- Ollama (for local LLM support)
+  - [Install Ollama](https://ollama.ai/download)
+  - Pull the llama3 model: `ollama pull llama3:8b`
 
 ### Setup
 ```bash
@@ -31,9 +37,12 @@ cd medical-chatbot
 # Install dependencies
 pip install -r req.txt
 
+# Install Chainlit 
+pip install chainlit
+
 # Set up environment variables
-cp .env.example .env  # or create a .env file manually
-# Add your PINECONE_API_KEY to .env
+# Create a .env file with your Pinecone API key
+echo "PINECONE_API_KEY = your_pinecone_api_key" > .env
 ```
 
 ### Index the Medical Data
@@ -41,17 +50,32 @@ cp .env.example .env  # or create a .env file manually
 python store_index.py
 ```
 
-### Run the Application
-```bash
-python app.py
-```
+### Running the Application
 
+#### Flask UI
+```bash
+python app_flask.py
+```
 Visit `http://localhost:5000` in your browser.
+
+#### Chainlit UI
+```bash
+chainlit run app_cl.py
+```
+Visit `http://localhost:8000` in your browser.
+
+The application supports two different interfaces:
+- **Flask UI**: Classic web interface with HTML/CSS
+- **Chainlit UI**: Modern, reactive chat interface with conversation history support
+
+You can customize the Chainlit welcome screen by editing the `chainlit.md` file.
 
 ## Folder Structure
 ```
 medical-chatbot/
-├── app.py                # Flask app entry point
+├── app_flask.py          # Flask app entry point
+├── app_cl.py             # Chainlit app entry point (with conversation history)
+├── chainlit.md           # Configuration for Chainlit UI
 ├── store_index.py        # PDF ingestion and vector store
 ├── req.txt               # Python dependencies
 ├── setup.py              # Packaging info
@@ -59,12 +83,13 @@ medical-chatbot/
 │   ├── helper.py         # PDF loading, text splitting, embeddings
 │   ├── prompt.py         # System prompt for LLM
 │   └── __init__.py
+├── .chainlit/            # Chainlit configuration directory
 ├── Data/
 │   └── The_GALE_ENCYCLOPEDIA_of_MEDICINE_SECOND.pdf
 ├── templates/
-│   └── chatbot.html      # Frontend HTML
+│   └── chatbot.html      # Frontend HTML for Flask
 ├── static/
-│   └── style.css         # CSS styling
+│   └── style.css         # CSS styling for Flask
 ├── research/
 │   └── trials.ipynb      # Research notebook
 ├── LICENSE
@@ -81,3 +106,5 @@ Basil Reda
 - [LangChain](https://github.com/langchain-ai/langchain)
 - [Pinecone](https://www.pinecone.io/)
 - [HuggingFace](https://huggingface.co/)
+- [Ollama](https://ollama.ai/)
+- [Chainlit](https://chainlit.io/)
