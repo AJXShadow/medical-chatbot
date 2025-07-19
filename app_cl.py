@@ -3,6 +3,7 @@ import chainlit as cl
 from src.helper import hugging_face_embeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain.chat_models import ChatOllama
+from langchain_groq import ChatGroq
 from dotenv import load_dotenv, find_dotenv
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -28,7 +29,9 @@ retrieval = docsearch.as_retriever(
     search_type="similarity", 
     search_kwargs={"k": 5}
 )
-llm = ChatOllama(model="llama3:8b", temperature=0.7)
+# llm = ChatOllama(model="llama3:8b", temperature=0.7)
+llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0.2)
+
 prompt_template = ChatPromptTemplate.from_messages(
     [
         ("system", system_prompt),

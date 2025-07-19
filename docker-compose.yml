@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  medical-chatbot:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
+    volumes:
+      - ./Data:/app/Data
+    command: chainlit run app_cl.py --host 0.0.0.0
