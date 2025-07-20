@@ -9,5 +9,6 @@ langchain_community
 langchain_openai
 langchain_experimental
 groq
+langchain_groq
 chainlit
 pyreadline3
